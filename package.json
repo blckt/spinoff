@@ -1,0 +1,14 @@
+{
+  "name": "hackaton",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node  server.js"
+  },
+  "dependencies": {
+    "good": "^6.6.0",
+    "good-console": "^5.3.1",
+    "hapi": "^13.2.2",
+    "inert": "^3.2.0"
+  }
+}
