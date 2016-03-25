@@ -1,10 +1,10 @@
+var  request=require('request'),
+promise=require('promise'),
+config=require('../config/config');
 
 module.exports=function(server){
+
 	
-	server.register(require('inert'),(err)=>{
-		if (err) {
-			throw err;
-		}
 		server.route({
 			method: 'GET',
 			path: '/',
@@ -12,14 +12,23 @@ module.exports=function(server){
 				reply.file('./public/index.html');
 			}
 		});
-		server.route({
-			method: 'GET',
-			path: '/{name}',
-			handler: function (request, reply) {
-				reply('Hello, ' + encodeURIComponent(request.params.name) + '!');
-			}
-		});
 
+	server.route({
+        method:'*',
+        path:'/auth',
+        config:{
+            auth:{
+                strategy:'facebook',
+                mode:'try'
+            }
+        },
+        handler:function (req,reply) {
+            if(!req.auth.isAuthenticated){
+                return reply('Auth failed due:'+req.auth.error);
+            } else {
+            }
 
-	});
+        }
+    })
+	
 }

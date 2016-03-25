@@ -2,12 +2,12 @@
 
 const Hapi = require('hapi');
 const Good=require('good');
-
+const bell=require('bell');
 const server = new Hapi.Server();
-server.connection({ port: 3000 });
+server.connection({ host:'localhost',port: 3000 });
+require('./db/connection');
 
-require('./routes/index')(server);
-server.register({
+server.register([{
 	register:Good,
 	options:{
 		reporters:[{
@@ -20,11 +20,26 @@ server.register({
 
 		}]
 	}
-},(err)=>{
+},
+require('inert'),
+	bell
+],(err)=>{
 	if(err){
 		throw err;
 	}
-	server.start((err) => {
+    let config=require('./config/config');
+    server.auth.strategy('facebook','bell',{
+        provider:'facebook',
+        password:'heNezu38uy6REkukEswaV5BrEX66ew7Y',
+        isSecure:false,
+        clientId:config.appID,
+        clientSecret:config.secret,
+        location:'http://localhost:3000'
+
+    });
+    require('./routes/index')(server);
+
+    server.start((err) => {
 
 		if (err) {
 			throw err;
